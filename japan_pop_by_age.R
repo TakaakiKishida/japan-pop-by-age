@@ -1,12 +1,161 @@
-setwd("~/documents/RDataVis/worldbank_population/")
+setwd("~/Documents/GitHub/japan-pop-by-age/data/")
 
 if (!require("pacman")) install.packages("pacman")
 library(pacman) 
 
 pacman::p_load(tidyverse)
 
+
+
 # ------------------------------------
 # import data
+
+pop0_14 <- read_csv("2019-ages-0-14.csv")
+pop15_64 <- read_csv("2019-ages-15-64.csv")
+pop65_above <- read_csv("2019-ages-65-above.csv")
+poptotal <- read_csv("2019-ages-total.csv")
+
+
+
+# ------------------------------------
+# processing
+
+# pop <- bind_rows(pop0_14, pop15_64, pop65_above, poptotal)
+# category <- c("age-0-14", "age-15-64", "age-65-above", "age-total")
+# 
+# pop <- pop %>% 
+#   dplyr::rename(cname = "Country Name") %>% 
+#   dplyr::filter(cname == "Japan") %>% 
+#   dplyr::mutate(category = category) %>% 
+#   dplyr::relocate(cname, category) %>% 
+#   dplyr::select(-"Indicator Name", -"Indicator Code", -"Country Code", -"2020")
+
+# convert to long tables
+
+pop_1 <- pop0_14 %>%
+  dplyr::rename(cname = "Country Name") %>%
+  dplyr::filter(cname == "Japan") %>%
+  dplyr::mutate(category = "age-0-14") %>% 
+  dplyr::relocate(category) %>% 
+  dplyr::select(-"cname", -"Indicator Name", -"Indicator Code", -"Country Code", -"2020") %>% 
+  pivot_longer(starts_with(c("19", "20")),
+               names_to = "year",
+               values_to = "population")
+
+pop_2 <- pop15_64 %>%
+  dplyr::rename(cname = "Country Name") %>%
+  dplyr::filter(cname == "Japan") %>%
+  dplyr::mutate(category = "age-15-64") %>% 
+  dplyr::relocate(category) %>% 
+  dplyr::select(-"cname", -"Indicator Name", -"Indicator Code", -"Country Code", -"2020") %>% 
+  pivot_longer(starts_with(c("19", "20")),
+               names_to = "year",
+               values_to = "population")
+
+pop_3 <- pop65_above %>%
+  dplyr::rename(cname = "Country Name") %>%
+  dplyr::filter(cname == "Japan") %>%
+  dplyr::mutate(category = "age-65-above") %>% 
+  dplyr::relocate(category) %>% 
+  dplyr::select(-"cname", -"Indicator Name", -"Indicator Code", -"Country Code", -"2020") %>% 
+  pivot_longer(starts_with(c("19", "20")),
+               names_to = "year",
+               values_to = "population")
+
+pop_4 <- poptotal %>%
+  dplyr::rename(cname = "Country Name") %>%
+  dplyr::filter(cname == "Japan") %>%
+  dplyr::mutate(category = "age-total") %>% 
+  dplyr::relocate(category) %>% 
+  dplyr::select(-"cname", -"Indicator Name", -"Indicator Code", -"Country Code", -"2020") %>% 
+  pivot_longer(starts_with(c("19", "20")),
+               names_to = "year",
+               values_to = "population")
+
+# as the result below suggests, total population may be incorrect
+(pop_1$population + pop_2$population + pop_3$population) == pop_4$population
+
+
+# append long data
+pop <- bind_rows(pop_1, pop_2, pop_3)
+
+# ------------------------------------
+# visualizing
+
+
+
+
+head(pop)
+
+# pop %>% 
+#   select(starts_with(c("19", "20")))
+
+pop_1 <- pop %>% 
+  pivot_longer(1960:2019, 
+               names_to = c(".value", "item"), 
+               names_sep = "_")
+
+pop_1 <- pop %>% 
+  pivot_longer(starts_with(c("19", "20")), 
+               names_to = c(".value", "item"), 
+               names_sep = "_")
+
+
+
+
+pop_1 <- pop %>% 
+  pivot_longer(starts_with(c("19", "20")), 
+               names_to = "category",
+               names_prefix = "age-",
+               values_to = "category")
+
+pop <- pop %>% 
+  pivot_longer(starts_with(c("19", "20")), 
+               names_to = "age-",
+               values_to = "category")
+
+df4_L <- df4 %>%
+  pivot_longer(cols         = starts_with("Confirmed"), 
+               names_to     = "Country",
+               names_prefix = "Confirmed_",
+               values_to    = "Confirmed")
+
+iris %>% select(starts_with(c("Petal", "Sepal")))
+
+
+# ---------------------
+
+library(gapminder)
+gpm <- data(gapminder)
+gapminder
+gapminder_long <- gapminder %>%
+  pivot_longer(
+    lifeExp:gdpPercap,
+    names_to = "measure",
+    values_to = "value"
+  )
+
+# ------------------
+
+
+
+
+
+
+
+
+files <- list.files(path = "~/Documents/GitHub/japan-pop-by-age/data",
+                    pattern = ".csv",
+                    full.names = T)
+
+data <- lapply(files,read.csv)
+
+for(i in 1:4){
+  i <- formatC(i, width = 2, flag = "0") 
+  df <- paste("pop", i, ".csv", sep = "") 
+  eval(parse(text=paste("data", i, "<- read.csv('", df, "')", sep=""))) 
+}
+
 province_shp <- read_sf("gadm36_IDN_1.shp")
 district_shp <- read_sf("gadm36_IDN_2.shp")
 subdist_shp <- read_sf("gadm36_IDN_3.shp")
@@ -154,28 +303,3 @@ ggsave(file = "forest_cover_2000.jpeg", plot = cover,
 # ggsave(file = "forest_cover_2000.pdf", plot = cover, 
 #        width = 30, height = 12.5)
 
-
-
-
-
-# ------------------------------------
-# ------------------------------------
-
-# 
-# Setting forest loss density classes --- choropleth-grid-map
-# subdist_shp$treecover2000_class <- 
-#   cut(subdist_shp$treecover2000_km, 
-#       breaks = c(-Inf, 250, 500, 750, 1000, 
-#                  1500, 2000, 2500, 3000, Inf), 
-#       labels = c("< 250", "250-500", "500-750", 
-#                  "750-1,000", "1,000-1,500", 
-#                  "1,500-2,000", "2,000-2,500", 
-#                  "2,500-3,000", "> 3,000")) # 3
-
-# subdist_shp$treecover2000_class <- 
-#   cut(subdist_shp$treecover2000, 
-#       breaks = c(-Inf, 100000, 250000, 500000, 1000000, 
-#                  1500000, 2000000, 2500000, 3000000, Inf), 
-#       labels = c('< 100,000', '100,000-250,000', '250,000-500,000', '500,000-1,000,000', 
-#                  '1,000,000-1,500,000', '1,500,000-2,000,000', '2,000,000-2,500,000', 
-#                  '2,500,000-3,000,000', '> 3,000,000')) # 3
