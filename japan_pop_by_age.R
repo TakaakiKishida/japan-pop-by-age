@@ -117,7 +117,7 @@ h_dash_lines_5 <- geom_segment(
       x = 1960, xend = 2019),
   color = "black", linetype = 'dashed', alpha = 0.1)
 
-
+popage %>% filter(year == 2019)
 
 # ------------------------------------
 # visualizing -- ggplot
@@ -125,10 +125,9 @@ h_dash_lines_5 <- geom_segment(
 popfig1 <- ggplot() + 
   geom_area(data = popage, 
             aes(x = year, y = population / 1000,
-                # fill = category,
                 fill = forcats::fct_rev(category)),
                 color = "white",
-            alpha = 0.5) +
+            alpha = 0.7) +
   h_dash_lines_1 + h_dash_lines_2 + h_dash_lines_3 + 
   h_dash_lines_4 + h_dash_lines_5 +
   labs(title = "Age Distribution of Population in Japan, 1960-2019",
@@ -141,24 +140,54 @@ popfig1 <- ggplot() +
                      expand = c(0, 0),
                      labels = scales::comma,
                      breaks = seq(0, 125000, 25000)) +
-  scale_x_continuous(limits = c(1960, 2027),
+  scale_x_continuous(limits = c(1960, 2028),
                      expand = c(0, 0),
                      breaks = year_range) +
   theme_minimal() + theme(panel.grid=element_blank()) +
   theme(text = element_text(family = "Optima"),
-        plot.title = element_text(size = 17),
-        axis.text = element_text(color = "black"),
+        plot.title = element_text(size = 22),
+        plot.caption = element_text(hjust = 0, size = 10),
+        axis.text = element_text(color = "black", size = 10),
+        axis.title.y = element_text(size = 14),
+        axis.title.x = element_blank(),
         plot.background = element_rect(fill = "#f5f5f2"),
-        legend.position = "none") +
+        legend.position = "none") + 
+  
+  # additional texts -- legend
   annotate(geom = "text", label= "0-14 years",
-           x = 2022, y = 8000,
-           color = "#135280", family = "Optima", size = 4) +
+           x = 2023, y = 8000,
+           color = "#135280", family = "Optima", size = 5) +
   annotate(geom = "text", label= "15-64 years",
-           x = 2022.3, y = 55000,
-           color = "#2695ab", family = "Optima", size = 4) +
+           x = 2023.3, y = 55000,
+           color = "#2695ab", family = "Optima", size = 5) +
   annotate(geom = "text", label= "65+ years",
-           x = 2021.8, y = 100000,
-           color = "#8ba6b5", family = "Optima", size = 4) 
+           x = 2022.8, y = 110000,
+           color = "#8ba6b5", family = "Optima", size = 5) + 
+  # additional lines -- arrow both 
+  annotate(geom = "segment", x = 2016.8, xend = 2016.8, 
+           y = 0, yend = 15775, 
+           arrow = grid::arrow(length = unit(0.2, "cm"), 
+                               ends = "both"), color = "DimGray") +
+  annotate(geom = "segment", x = 2016.8, xend = 2016.8, 
+           y = 16600, yend = 92008, 
+           arrow = grid::arrow(length = unit(0.2, "cm"), 
+                               ends = "both"), color = "DimGray") +
+  annotate(geom = "segment", x = 2016.8, xend = 2016.8, 
+           y = 92508, yend = 126383, 
+           arrow = grid::arrow(length = unit(0.2, "cm"), 
+                               ends = "both"), color = "DimGray") +
+  # additional texts -- numbers
+  annotate(geom = "text", label= "15,875",
+           x = 2016.8, y = 12000,
+           color = "white", family = "Optima", size = 4) +
+  annotate(geom = "text", label= "75,033",
+           x = 2016.8, y = 88000,
+           color = "white", family = "Optima", size = 4) +
+  annotate(geom = "text", label= "35,357",
+           x = 2016.8, y = 121500,
+           color = "white", family = "Optima", size = 4) 
+  
+  
 
 popfig1
 
@@ -168,43 +197,3 @@ ggsave(popfig1, filename = "popfig1.png",
 
 
 # ------------------------------------
-
-
-
-
-# ------------------------------------
-
-pop_map2 <- ggplot() + 
-  geom_point(data= kansai_pop, 
-             aes(x = long, y = lat,
-                 size = Population, color = Population),
-             alpha = 0.3) + 
-  scale_color_gradient(low = "#edd6d4", high = "#7A0018") + 
-  # Show a legend for a colour
-  guides(size = FALSE) + 
-  scale_size_area(max_size = 15) + 
-  labs(x = NULL, 
-       y = NULL, 
-       title = "Kansai's Regional Demographics", 
-       subtitle = "Population in Kansai Municipalities, 2015", 
-       caption = "Source: National Spatial Planning and Regional Policy Bureau") +
-  theme_void() +
-  theme(
-    plot.title = element_text(vjust = -2, hjust = 0.1),
-    plot.subtitle = element_text(vjust = -2, hjust = 0.1),
-    plot.caption = element_text(vjust = 3, hjust = 0.8),
-    text = element_text(family = "Optima"),
-    plot.background = element_rect(fill = "#f5f5f2"), 
-    legend.position = c(0.13, 0.18))  
-
-
-
-
-
-# save as images
-ggsave(file = "forest_cover_2000.jpeg", plot = cover, 
-       width = 30, height = 12.5)
-
-# ggsave(file = "forest_cover_2000.pdf", plot = cover, 
-#        width = 30, height = 12.5)
-
