@@ -119,6 +119,8 @@ h_dash_lines_5 <- geom_segment(
 
 popage %>% filter(year == 2019)
 
+
+
 # ------------------------------------
 # visualizing -- ggplot
 
@@ -140,29 +142,29 @@ popfig1 <- ggplot() +
                      expand = c(0, 0),
                      labels = scales::comma,
                      breaks = seq(0, 125000, 25000)) +
-  scale_x_continuous(limits = c(1960, 2028),
+  scale_x_continuous(limits = c(1960, 2030),
                      expand = c(0, 0),
                      breaks = year_range) +
   theme_minimal() + theme(panel.grid=element_blank()) +
   theme(text = element_text(family = "Optima"),
-        plot.title = element_text(size = 22),
-        plot.caption = element_text(hjust = 0, size = 10),
-        axis.text = element_text(color = "black", size = 10),
-        axis.title.y = element_text(size = 14),
+        plot.title = element_text(size = 24),
+        plot.caption = element_text(hjust = 0, size = 14),
+        axis.text = element_text(color = "black", size = 14),
+        axis.title.y = element_text(size = 18),
         axis.title.x = element_blank(),
         plot.background = element_rect(fill = "#f5f5f2"),
         legend.position = "none") + 
   
   # additional texts -- legend
   annotate(geom = "text", label= "0-14 years",
-           x = 2023, y = 8000,
-           color = "#135280", family = "Optima", size = 5) +
+           x = 2024, y = 8000,
+           color = "#135280", family = "Optima", size = 6) +
   annotate(geom = "text", label= "15-64 years",
-           x = 2023.3, y = 55000,
-           color = "#2695ab", family = "Optima", size = 5) +
+           x = 2024.3, y = 55000,
+           color = "#2695ab", family = "Optima", size = 6) +
   annotate(geom = "text", label= "65+ years",
-           x = 2022.8, y = 110000,
-           color = "#8ba6b5", family = "Optima", size = 5) + 
+           x = 2023.8, y = 110000,
+           color = "#8ba6b5", family = "Optima", size = 6) + 
   # additional lines -- arrow both 
   annotate(geom = "segment", x = 2016.8, xend = 2016.8, 
            y = 0, yend = 15775, 
@@ -178,14 +180,14 @@ popfig1 <- ggplot() +
                                ends = "both"), color = "DimGray") +
   # additional texts -- numbers
   annotate(geom = "text", label= "15,875",
-           x = 2016.8, y = 12000,
-           color = "white", family = "Optima", size = 4) +
+           x = 2016, y = 12000,
+           color = "white", family = "Optima", size = 5) +
   annotate(geom = "text", label= "75,033",
-           x = 2016.8, y = 88000,
-           color = "white", family = "Optima", size = 4) +
+           x = 2016, y = 88000,
+           color = "white", family = "Optima", size = 5) +
   annotate(geom = "text", label= "35,357",
-           x = 2016.8, y = 121500,
-           color = "white", family = "Optima", size = 4) 
+           x = 2016, y = 121500,
+           color = "white", family = "Optima", size = 5) 
   
   
 
