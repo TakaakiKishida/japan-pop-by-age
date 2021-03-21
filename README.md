@@ -9,5 +9,3 @@
 ### The graph below is a population by age of Japan from 1960 to 2019
 
 In this repository, I demonstrate how to draw a population map using ggplot2::geom_area and Japanese population data
-
-![pop_map1](https://user-images.githubusercontent.com/37149906/95010581-6f145880-0665-11eb-9c51-b041f94719b2.png)
