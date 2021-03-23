@@ -1,9 +1,7 @@
-# Stacked area graph for population in Japan
-
-## Written by Takaaki Kishida
+## Stacked area graph for population in Japan
 ## *Last Updated: March 21, 2021*
 
-### **Keywords: R, ggplot2, Area Graph**
+### **Keywords: R, ggplot2, Area Graph, Population, Japan**
 ### Comments Welcome!
 ### The graph below is a population by age of Japan from 1960 to 2019
 
