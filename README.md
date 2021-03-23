@@ -1,6 +1,5 @@
 # Stacked area graph for population in Japan
 
-# How to Draw a Population Map using R::ggplot2
 ## Written by Takaaki Kishida
 ## *Last Updated: March 21, 2021*
 
