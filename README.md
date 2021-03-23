@@ -6,4 +6,7 @@
 
 In this repository, I demonstrate how to draw a stacked area graph of population using ggplot2::geom_area and Japanese population data.
 
+Data used in this repository can be obtained from: World Bank Open Data (https://data.worldbank.org/)
+
+
 ![popfig1](https://user-images.githubusercontent.com/37149906/111911730-123d1b00-8aaa-11eb-886d-960660ea6af2.png)
