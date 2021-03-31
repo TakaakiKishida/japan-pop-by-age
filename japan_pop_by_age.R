@@ -153,7 +153,8 @@ popfig1 <- ggplot() +
         axis.title.y = element_text(size = 18),
         axis.title.x = element_blank(),
         plot.background = element_rect(fill = "#f5f5f2"),
-        legend.position = "none") + 
+        legend.position = "none",
+        plot.margin = margin(25, 25, 10, 25)) + 
   
   # additional texts -- legend
   annotate(geom = "text", label= "0-14 years",
